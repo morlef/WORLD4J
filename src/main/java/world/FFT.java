@@ -7,6 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
 import world.util.Holder;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/fft.cpp
+ */
 @PackagePrivate
 public class FFT {
     public static final int FORWARD = 1;

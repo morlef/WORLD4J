@@ -8,6 +8,12 @@ import world.common.ForwardRealFFT;
 import world.common.InverseRealFFT;
 import world.util.Utils;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/cheaptrick.cpp
+ */
 @PackagePrivate
 public record CheapTrick(World world) {
     public void initialize(final double[] x, int fs, final double[] temporalPositions, final double[] f0, final CheapTrickOption option, double[][] spectrogram) {

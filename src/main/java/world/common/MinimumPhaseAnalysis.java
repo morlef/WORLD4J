@@ -5,6 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import world.FFT;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/world/common.h
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

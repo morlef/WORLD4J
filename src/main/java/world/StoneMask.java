@@ -3,6 +3,12 @@ package world;
 import world.common.ForwardRealFFT;
 import world.util.Utils;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/stonemask.cpp
+ */
 public record StoneMask(World world) {
     static void getBaseIndex(double currentPosition, final double[] baseTime, int fs, int[] indexRaw) {
         for (int i = 0; i < baseTime.length; ++i)

@@ -8,6 +8,9 @@ import world.synthesis.Synthesis;
 import world.synthesis.WorldSynthesizer;
 import world.util.Utils;
 
+/**
+ * from src/world/macrodefinitions.h
+ */
 public class World extends Thread {
     @Getter
     private static final Logger logger;

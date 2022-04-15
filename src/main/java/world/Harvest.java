@@ -9,6 +9,12 @@ import world.common.ZeroCrossings;
 import world.util.Holder;
 import world.util.Utils;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/harvest.cpp
+ */
 @PackagePrivate
 public record Harvest(World world) {
     public static void getWaveformAndSpectrumSub(final double[] x, int decimationRatio, double[] y) {

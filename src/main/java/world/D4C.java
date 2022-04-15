@@ -9,6 +9,12 @@ import world.util.Utils;
 
 import java.util.Arrays;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/d4c.cpp
+ */
 @PackagePrivate
 public record D4C(World world) {
     public static void setParametersForGetWindowedWaveform(int halfWindowLength, int xLength, double currentPosition, int fs, double currentF0,

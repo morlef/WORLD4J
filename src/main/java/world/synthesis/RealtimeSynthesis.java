@@ -7,6 +7,12 @@ import world.common.MinimumPhaseAnalysis;
 import world.util.Holder;
 import world.util.Utils;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/synthrealtime.cpp
+ */
 public record RealtimeSynthesis(World world) {
     public static void getNoiseSpectrum(World world, int noiseSize, int fftSize, final ForwardRealFFT forwardRealFFT) {
         double average = 0.0;

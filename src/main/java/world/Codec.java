@@ -5,6 +5,12 @@ import world.common.ForwardRealFFT;
 import world.common.InverseComplexFFT;
 import world.util.Utils;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/codec.cpp
+ */
 @PackagePrivate
 public record Codec(World world) {
     public int getNumberOfAperiodicities(int fs) {

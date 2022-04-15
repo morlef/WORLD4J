@@ -9,6 +9,12 @@ import world.common.MinimumPhaseAnalysis;
 
 import java.util.UUID;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/common.cpp, src/matlabfunctions.cpp
+ */
 public class Utils {
     public static double getSafeAperiodicity(double x) {
         return Math.max(0.001, Math.min(0.999999999999, x));

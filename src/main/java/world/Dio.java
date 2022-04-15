@@ -8,6 +8,12 @@ import world.common.ZeroCrossings;
 import world.util.Holder;
 import world.util.Utils;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/dio.cpp
+ */
 @PackagePrivate
 public record Dio(World world) {
     public static void designLowCutFilter(int n, int fftSize, double[] lowCutFilter) {

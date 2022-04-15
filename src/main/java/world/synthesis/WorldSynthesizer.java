@@ -7,6 +7,12 @@ import world.common.ForwardRealFFT;
 import world.common.InverseRealFFT;
 import world.common.MinimumPhaseAnalysis;
 
+/**
+ * Copyright 2012 Masanori Morise
+ * @author mmorise [at] meiji.ac.jp (Masanori Morise)
+ *
+ * from src/world/synthrealtime.h
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
