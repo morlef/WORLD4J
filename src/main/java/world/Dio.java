@@ -384,18 +384,7 @@ public record Dio(World world) {
         dioGeneralBody(world, x, fs, option.framePeriod, option.f0Floor, option.f0Ceil, option.channelsInOctave, option.speed, option.allowedRange, temporalPositions, f0);
     }
 
-    public void initializeDioOption(DioOption option) {
-        option.channelsInOctave = 2.0;
-        option.f0Ceil = World.CEIL_F0;
-        option.f0Floor = World.FLOOR_F0;
-        option.framePeriod = 5;
-
-        option.speed = 1;
-        option.allowedRange = 0.1;
-    }
-
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class DioOption {
         double f0Floor;
@@ -404,5 +393,15 @@ public record Dio(World world) {
         double framePeriod;
         int speed;
         double allowedRange;
+
+        public DioOption() {
+            this.channelsInOctave = 2.0;
+            this.f0Ceil = World.CEIL_F0;
+            this.f0Floor = World.FLOOR_F0;
+            this.framePeriod = 5;
+
+            this.speed = 1;
+            this.allowedRange = 0.1;
+        }
     }
 }

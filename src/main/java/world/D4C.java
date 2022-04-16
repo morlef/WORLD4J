@@ -168,8 +168,7 @@ public record D4C(World world) {
     public static void d4cLoveTrain(World world, final double[] x, int fs, final double[] f0, final double[] temporalPositions, double[] aperiodicity0) {
         double lowestF0 = 40.0;
         int fftSize = (int) (Math.pow(2.0, 1.0 + (int) (Math.log(3.0 * fs / lowestF0 + 1) / World.LOG_2)));
-        ForwardRealFFT forwardRealFFT = new ForwardRealFFT();
-        Utils.initializeForwardRealFFT(fftSize, forwardRealFFT);
+        ForwardRealFFT forwardRealFFT = new ForwardRealFFT(fftSize);
 
         int boundary0 = (int) (Math.ceil(100.0 * fftSize / fs));
         int boundary1 = (int) (Math.ceil(4000.0 * fftSize / fs));
@@ -216,8 +215,7 @@ public record D4C(World world) {
 
         int fftSizeD4C = (int) (Math.pow(2.0, 1.0 + (int) (Math.log(4.0 * fs / World.FLOOR_F0D4C + 1) / World.LOG_2)));
 
-        ForwardRealFFT forwardRealFFT = new ForwardRealFFT();
-        Utils.initializeForwardRealFFT(fftSizeD4C, forwardRealFFT);
+        ForwardRealFFT forwardRealFFT = new ForwardRealFFT(fftSizeD4C);
 
         int numberOfAperiodicities = (int) (Math.min(World.UPPER_LIMIT, fs / 2.0 - World.FREQUENCY_INTERVAL) / World.FREQUENCY_INTERVAL);
         double[] window =  new double[(int) (World.FREQUENCY_INTERVAL * fftSizeD4C / fs) * 2 + 1];
@@ -246,14 +244,13 @@ public record D4C(World world) {
         }
     }
 
-    public void initializeD4COption(D4COption option) {
-        option.threshold = World.THRESHOLD;
-    }
-
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class D4COption {
         double threshold;
+
+        public D4COption() {
+            this.threshold = World.THRESHOLD;
+        }
     }
 }

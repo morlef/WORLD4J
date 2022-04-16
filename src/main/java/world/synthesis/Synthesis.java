@@ -6,6 +6,8 @@ import world.common.InverseRealFFT;
 import world.common.MinimumPhaseAnalysis;
 import world.util.Utils;
 
+import java.util.Arrays;
+
 /**
  * Copyright 2012 Masanori Morise
  * @author mmorise [at] meiji.ac.jp (Masanori Morise)
@@ -195,23 +197,20 @@ public record Synthesis(World world) {
         return getPulseLocationsForTimeBase(interpolatedF0, timeAxis, yLength, fs, pulseLocations, pulseLocationsIndex, pulseLocationsTimeShift);
     }
 
-    public void synthesis(final double[] f0, final double[][] spectrogram, final double[][] aperiodicity, int fftSize, double framePeriod, int fs, int y_length, double[] y) {
+    public void synthesis(final double[] f0, final double[][] spectrogram, final double[][] aperiodicity, int fftSize, double framePeriod, int fs, double[] y) {
         double[] impulseResponse = new double[fftSize];
 
-        for (int i = 0; i < y_length; ++i) y[i] = 0.0;
+        Arrays.fill(y, 0.0);
 
-        MinimumPhaseAnalysis minimumPhase = new MinimumPhaseAnalysis();
-        Utils.initializeMinimumPhaseAnalysis(fftSize, minimumPhase);
-        InverseRealFFT inverseRealFFT = new InverseRealFFT();
-        Utils.initializeInverseRealFFT(fftSize, inverseRealFFT);
-        ForwardRealFFT forwardRealFFT = new ForwardRealFFT();
-        Utils.initializeForwardRealFFT(fftSize, forwardRealFFT);
+        MinimumPhaseAnalysis minimumPhase = new MinimumPhaseAnalysis(fftSize);
+        InverseRealFFT inverseRealFFT = new InverseRealFFT(fftSize);
+        ForwardRealFFT forwardRealFFT = new ForwardRealFFT(fftSize);
 
-        double[] pulseLocations = new double[y_length];
-        int[] pulseLocationsIndex = new int[y_length];
-        double[] pulseLocations_time_shift = new double[y_length];
-        double[] interpolatedVuv = new double[y_length];
-        int numberOfPulses = getTimeBase(f0, fs, framePeriod / 1000.0, y_length, (double) (fs / fftSize) + 1.0, pulseLocations, pulseLocationsIndex, pulseLocations_time_shift, interpolatedVuv);
+        double[] pulseLocations = new double[y.length];
+        int[] pulseLocationsIndex = new int[y.length];
+        double[] pulseLocations_time_shift = new double[y.length];
+        double[] interpolatedVuv = new double[y.length];
+        int numberOfPulses = getTimeBase(f0, fs, framePeriod / 1000.0, y.length, (double) (fs / fftSize) + 1.0, pulseLocations, pulseLocationsIndex, pulseLocations_time_shift, interpolatedVuv);
 
         framePeriod /= 1000.0;
         int noiseSize;
@@ -222,7 +221,7 @@ public record Synthesis(World world) {
             getOneFrameSegment(world, interpolatedVuv[pulseLocationsIndex[i]], noiseSize, spectrogram, fftSize, aperiodicity, f0.length, framePeriod, pulseLocations[i], pulseLocations_time_shift[i], fs, forwardRealFFT, inverseRealFFT, minimumPhase, impulseResponse);
             offset = pulseLocationsIndex[i] - fftSize / 2 + 1;
             lower_limit = Math.max(0, -offset);
-            upper_limit = Math.min(fftSize, y_length - offset);
+            upper_limit = Math.min(fftSize, y.length - offset);
             for (int j = lower_limit; j < upper_limit; ++j) {
                 index = j + offset;
                 y[index] += impulseResponse[j];

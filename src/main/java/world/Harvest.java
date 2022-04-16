@@ -319,8 +319,7 @@ public record Harvest(World world) {
 
     public static void getMeanF0(World world, final double[] x, double fs, double currentPosition, double currentF0, int fftSize,
                                  double windowLengthInTime, final double[] baseTime, Holder<Double> refinedF0, Holder<Double> refinedScore) {
-        ForwardRealFFT forwardRealFFT = new ForwardRealFFT();
-        Utils.initializeForwardRealFFT(fftSize, forwardRealFFT);
+        ForwardRealFFT forwardRealFFT = new ForwardRealFFT(fftSize);
         FFT.FFTComplex mainSpectrum = new FFT.FFTComplex(fftSize);
         FFT.FFTComplex diffSpectrum = new FFT.FFTComplex(fftSize);
 
@@ -790,18 +789,17 @@ public record Harvest(World world) {
         }
     }
 
-    public void initializeHarvestOption(HarvestOption option) {
-        option.f0Ceil = World.CEIL_F0;
-        option.f0Floor = World.FLOOR_F0;
-        option.framePeriod = 5;
-    }
-
     @Data
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class HarvestOption {
         double f0Floor;
         double f0Ceil;
         double framePeriod;
+
+        public HarvestOption() {
+            this.f0Ceil = World.CEIL_F0;
+            this.f0Floor = World.FLOOR_F0;
+            this.framePeriod = 5;
+        }
     }
 }

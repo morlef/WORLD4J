@@ -62,8 +62,7 @@ public record Codec(World world) {
 
         getParametersForCoding(World.FLOOR_FREQUENCY, Math.min(fs / 2.0, World.CEIL_FREQUENCY), fs, fftSize, melAxis, frequencyAxis, weight);
 
-        ForwardRealFFT forwardRealFFT = new ForwardRealFFT();
-        Utils.initializeForwardRealFFT(fftSize / 2, forwardRealFFT);
+        ForwardRealFFT forwardRealFFT = new ForwardRealFFT(fftSize / 2);
 
         for (int i = 0; i < f0Length; ++i) {
             for (int j = 0; j < fftSize / 2 + 1; ++j)
@@ -79,8 +78,7 @@ public record Codec(World world) {
 
         getParametersForDecoding(World.FLOOR_FREQUENCY, Math.min(fs / 2.0, World.CEIL_FREQUENCY), fs, fftSize, numberOfDimensions, melAxis, frequencyAxis, weight);
 
-        InverseComplexFFT inverseComplexFFT = new InverseComplexFFT();
-        Utils.initializeInverseComplexFFT(fftSize / 2, inverseComplexFFT);
+        InverseComplexFFT inverseComplexFFT = new InverseComplexFFT(fftSize / 2);
 
         for (int i = 0; i < f0Length; ++i) {
             decodeOneFrame(world, codedSpectralEnvelope[i], frequencyAxis, fftSize, melAxis, weight, fftSize / 2, numberOfDimensions, inverseComplexFFT, spectrogram[i]);

@@ -71,11 +71,6 @@ public class World extends Thread {
         stoneMask = new StoneMask(this);
     }
 
-    @Override
-    public void start() {
-        super.start();
-    }
-
     static {
         logger = LogManager.getLogger("WORLD");
     }

@@ -19,4 +19,11 @@ public class InverseRealFFT {
     double[] waveform;
     FFT.FFTComplex spectrum;
     FFT.FFTPlan inverseFFT;
+
+    public InverseRealFFT(int fftSize) {
+        this.setFftSize(fftSize);
+        this.setWaveform(new double[fftSize]);
+        this.setSpectrum(new FFT.FFTComplex(fftSize));
+        this.setInverseFFT(FFT.c2r(fftSize, this.getSpectrum(), this.getWaveform(), FFT.ESTIMATE));
+    }
 }

@@ -86,8 +86,7 @@ public record StoneMask(World world) {
     }
 
     static double getMeanF0(World world, final double[] x, int fs, double currentPosition, double initialF0, int fftSize, double windowLengthInTime, final double[] baseTime) {
-        ForwardRealFFT forwardRealFFT = new ForwardRealFFT();
-        Utils.initializeForwardRealFFT(fftSize, forwardRealFFT);
+        ForwardRealFFT forwardRealFFT = new ForwardRealFFT(fftSize);
         FFT.FFTComplex mainSpectrum = new FFT.FFTComplex(fftSize);
         FFT.FFTComplex diffSpectrum = new FFT.FFTComplex(fftSize);
 

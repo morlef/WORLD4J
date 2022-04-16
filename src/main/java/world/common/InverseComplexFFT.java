@@ -19,4 +19,11 @@ public class InverseComplexFFT {
     FFT.FFTComplex input;
     FFT.FFTComplex output;
     FFT.FFTPlan inverseFFT;
+
+    public InverseComplexFFT(int fftSize) {
+        this.setFftSize(fftSize);
+        this.setInput(new FFT.FFTComplex(fftSize));
+        this.setOutput(new FFT.FFTComplex(fftSize));
+        this.setInverseFFT(FFT.dft(fftSize, this.getInput(), this.getOutput(), FFT.BACKWARD, FFT.ESTIMATE));
+    }
 }

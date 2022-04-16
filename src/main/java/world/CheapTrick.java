@@ -22,10 +22,8 @@ public record CheapTrick(World world) {
         double f0Floor = getF0FloorForCheapTrick(fs, fftSize);
         double[] spectralEnvelope = new double[fftSize];
 
-        ForwardRealFFT forwardRealFFT = new ForwardRealFFT();
-        Utils.initializeForwardRealFFT(fftSize, forwardRealFFT);
-        InverseRealFFT inverseRealFFT = new InverseRealFFT();
-        Utils.initializeInverseRealFFT(fftSize, inverseRealFFT);
+        ForwardRealFFT forwardRealFFT = new ForwardRealFFT(fftSize);
+        InverseRealFFT inverseRealFFT = new InverseRealFFT(fftSize);
 
         double currentF0;
         for (int i = 0; i < f0.length; ++i) {
@@ -35,13 +33,7 @@ public record CheapTrick(World world) {
         }
     }
 
-    private void initializeCheapTrickOption(int fs, CheapTrickOption option) {
-        option.q1 = -0.15;
-        option.f0Floor = World.FLOOR_F0;
-        option.fftSize = getFFTSizeForCheapTrick(fs, option);
-    }
-
-    public int getFFTSizeForCheapTrick(int fs, final CheapTrickOption option) {
+    public static int getFFTSizeForCheapTrick(int fs, final CheapTrickOption option) {
         return (int) (Math.pow(2.0, 1.0 + (int) (Math.log(3.0 * fs / option.f0Floor + 1) / World.LOG_2)));
     }
 
@@ -165,5 +157,11 @@ public record CheapTrick(World world) {
         double q1;
         double f0Floor;
         int fftSize;
+
+        public CheapTrickOption(int fs, CheapTrickOption option) {
+            option.q1 = -0.15;
+            option.f0Floor = World.FLOOR_F0;
+            option.fftSize = getFFTSizeForCheapTrick(fs, option);
+        }
     }
 }

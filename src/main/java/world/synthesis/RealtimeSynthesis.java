@@ -313,37 +313,6 @@ public record RealtimeSynthesis(World world) {
         return 1;
     }
 
-    public void initializeSynthesizer(int fs, double framePeriod, int fftSize, int bufferSize, int numberOfPointers, WorldSynthesizer synth) {
-        synth.fs = fs;
-        synth.framePeriod = framePeriod / 1000.0;
-        synth.bufferSize = bufferSize;
-        synth.numberOfPointers = numberOfPointers;
-        synth.fftSize = fftSize;
-
-        synth.f0Length = new int[numberOfPointers];
-        synth.spectrogram = new double[numberOfPointers][][];
-        synth.aperiodicity = new double[numberOfPointers][][];
-        synth.interpolatedVuv = new double[numberOfPointers][];
-        synth.pulseLocations = new double[numberOfPointers][];
-        synth.pulseLocationsIndex = new int[numberOfPointers][];
-        synth.numberOfPulses = new int[numberOfPointers];
-        synth.f0Origin = new int[numberOfPointers];
-        for (int i = 0; i < synth.numberOfPointers; ++i) {
-            synth.interpolatedVuv[i] = null;
-            synth.pulseLocations[i] = null;
-            synth.pulseLocationsIndex[i] = null;
-        }
-
-        synth.buffer = new double[bufferSize * 2 + fftSize];
-        synth.impulseResponse = new double[synth.fftSize];
-
-        refreshSynthesizer(synth);
-
-        Utils.initializeMinimumPhaseAnalysis(fftSize, synth.minimumPhase);
-        Utils.initializeInverseRealFFT(fftSize, synth.inverseRealFFT);
-        Utils.initializeForwardRealFFT(fftSize, synth.forwardRealFFT);
-    }
-
     public int addParameters(double[] f0, int f0Length, double[][] spectrogram, double[][] aperiodicity, WorldSynthesizer synth) {
         if (synth.headPointer - synth.currentPointer2 == synth.numberOfPointers)
             return 0;
@@ -376,27 +345,6 @@ public record RealtimeSynthesis(World world) {
         synth.headPointer++;
         synth.handoff = 1;
         return 1;
-    }
-
-    public void refreshSynthesizer(WorldSynthesizer synth) {
-        clearRingBuffer(0, synth.numberOfPointers, synth);
-        synth.handoffPhase = 0;
-        synth.handoffF0 = 0;
-        synth.cumulativeFrame = -1;
-        synth.lastLocation = 0;
-
-        synth.currentPointer = 0;
-        synth.currentPointer2 = 0;
-        synth.headPointer = 0;
-        synth.handoff = 0;
-
-        synth.i = 0;
-        synth.currentFrame = 0;
-
-        synth.synthesizedSample = 0;
-
-        for (int i = 0; i < synth.bufferSize * 2 + synth.fftSize; ++i)
-            synth.buffer[i] = 0;
     }
 
     public int isLocked(WorldSynthesizer synth) {

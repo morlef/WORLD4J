@@ -320,36 +320,6 @@ public class Utils {
         }
     }
 
-    public static void initializeForwardRealFFT(int fftSize, ForwardRealFFT forwardRealFFT) {
-        forwardRealFFT.setFftSize(fftSize);
-        forwardRealFFT.setWaveform(new double[fftSize]);
-        forwardRealFFT.setSpectrum(new FFT.FFTComplex(fftSize));
-        forwardRealFFT.setForwardFFT(FFT.r2c(fftSize, forwardRealFFT.getWaveform(), forwardRealFFT.getSpectrum(), FFT.ESTIMATE));
-    }
-
-    public static void initializeInverseRealFFT(int fftSize, InverseRealFFT inverseRealFFT) {
-        inverseRealFFT.setFftSize(fftSize);
-        inverseRealFFT.setWaveform(new double[fftSize]);
-        inverseRealFFT.setSpectrum(new FFT.FFTComplex(fftSize));
-        inverseRealFFT.setInverseFFT(FFT.c2r(fftSize, inverseRealFFT.getSpectrum(), inverseRealFFT.getWaveform(), FFT.ESTIMATE));
-    }
-
-    public static void initializeInverseComplexFFT(int fftSize, InverseComplexFFT inverseComplexFFT) {
-        inverseComplexFFT.setFftSize(fftSize);
-        inverseComplexFFT.setInput(new FFT.FFTComplex(fftSize));
-        inverseComplexFFT.setOutput(new FFT.FFTComplex(fftSize));
-        inverseComplexFFT.setInverseFFT(FFT.dft(fftSize, inverseComplexFFT.getInput(), inverseComplexFFT.getOutput(), FFT.BACKWARD, FFT.ESTIMATE));
-    }
-
-    public static void initializeMinimumPhaseAnalysis(int fftSize, MinimumPhaseAnalysis minimumPhase) {
-        minimumPhase.setFftSize(fftSize);
-        minimumPhase.setLogSpectrum(new double[fftSize]);
-        minimumPhase.setMinimumPhaseSpectrum(new FFT.FFTComplex(fftSize));
-        minimumPhase.setCepstrum(new FFT.FFTComplex(fftSize));
-        minimumPhase.setInverseFFT(FFT.r2c(fftSize, minimumPhase.getLogSpectrum(), minimumPhase.getCepstrum(), FFT.ESTIMATE));
-        minimumPhase.setForwardFFT(FFT.dft(fftSize, minimumPhase.getCepstrum(), minimumPhase.getMinimumPhaseSpectrum(), FFT.FORWARD, FFT.ESTIMATE));
-    }
-
     public static void getMinimumPhaseSpectrum(World world, final MinimumPhaseAnalysis minimumPhase) {
         for (int i = minimumPhase.getFftSize() / 2 + 1; i < minimumPhase.getFftSize(); ++i)
             minimumPhase.getLogSpectrum()[i] = minimumPhase.getLogSpectrum()[minimumPhase.getFftSize() - i];

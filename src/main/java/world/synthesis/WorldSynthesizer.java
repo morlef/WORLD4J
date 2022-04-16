@@ -14,8 +14,8 @@ import world.common.MinimumPhaseAnalysis;
  * from src/world/synthrealtime.h
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class WorldSynthesizer {
     int fs;
     double framePeriod;
@@ -54,4 +54,56 @@ public class WorldSynthesizer {
     MinimumPhaseAnalysis minimumPhase;
     InverseRealFFT inverseRealFFT;
     ForwardRealFFT forwardRealFFT;
+
+    public WorldSynthesizer(int fs, double framePeriod, int fftSize, int bufferSize, int numberOfPointers) {
+        this.fs = fs;
+        this.framePeriod = framePeriod / 1000.0;
+        this.bufferSize = bufferSize;
+        this.numberOfPointers = numberOfPointers;
+        this.fftSize = fftSize;
+
+        this.f0Length = new int[numberOfPointers];
+        this.spectrogram = new double[numberOfPointers][][];
+        this.aperiodicity = new double[numberOfPointers][][];
+        this.interpolatedVuv = new double[numberOfPointers][];
+        this.pulseLocations = new double[numberOfPointers][];
+        this.pulseLocationsIndex = new int[numberOfPointers][];
+        this.numberOfPulses = new int[numberOfPointers];
+        this.f0Origin = new int[numberOfPointers];
+        for (int i = 0; i < this.numberOfPointers; ++i) {
+            this.interpolatedVuv[i] = null;
+            this.pulseLocations[i] = null;
+            this.pulseLocationsIndex[i] = null;
+        }
+
+        this.buffer = new double[bufferSize * 2 + fftSize];
+        this.impulseResponse = new double[this.fftSize];
+
+        refreshSynthesizer(this);
+
+        this.minimumPhase = new MinimumPhaseAnalysis(fftSize);
+        this.inverseRealFFT = new InverseRealFFT(fftSize);
+        this.forwardRealFFT = new ForwardRealFFT(fftSize);
+    }
+
+    public void refreshSynthesizer(WorldSynthesizer synth) {
+        RealtimeSynthesis.clearRingBuffer(0, synth.numberOfPointers, synth);
+        synth.handoffPhase = 0;
+        synth.handoffF0 = 0;
+        synth.cumulativeFrame = -1;
+        synth.lastLocation = 0;
+
+        synth.currentPointer = 0;
+        synth.currentPointer2 = 0;
+        synth.headPointer = 0;
+        synth.handoff = 0;
+
+        synth.i = 0;
+        synth.currentFrame = 0;
+
+        synth.synthesizedSample = 0;
+
+        for (int i = 0; i < synth.bufferSize * 2 + synth.fftSize; ++i)
+            synth.buffer[i] = 0;
+    }
 }
