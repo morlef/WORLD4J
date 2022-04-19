@@ -1,7 +1,6 @@
 package world;
 
 import world.common.ForwardRealFFT;
-import world.util.Utils;
 
 /**
  * Copyright 2012 Masanori Morise
@@ -10,12 +9,12 @@ import world.util.Utils;
  * from src/stonemask.cpp
  */
 public record StoneMask(World world) {
-    static void getBaseIndex(double currentPosition, final double[] baseTime, int fs, int[] indexRaw) {
+    public static void getBaseIndex(double currentPosition, final double[] baseTime, int fs, int[] indexRaw) {
         for (int i = 0; i < baseTime.length; ++i)
             indexRaw[i] = (int) Math.round((currentPosition + baseTime[i]) * fs);
     }
 
-    static void getMainWindow(double currentPosition, final int[] indexRaw, int baseTimeLength, int fs, double windowLengthInTime, double[] mainWindow) {
+    public static void getMainWindow(double currentPosition, final int[] indexRaw, int baseTimeLength, int fs, double windowLengthInTime, double[] mainWindow) {
         double tmp;
         for (int i = 0; i < baseTimeLength; ++i) {
             tmp = (indexRaw[i] - 1.0) / fs - currentPosition;
@@ -25,14 +24,14 @@ public record StoneMask(World world) {
         }
     }
 
-    static void getDiffWindow(final double[] mainWindow, int baseTimeLength, double[] diffWindow) {
+    public static void getDiffWindow(final double[] mainWindow, int baseTimeLength, double[] diffWindow) {
         diffWindow[0] = -mainWindow[1] / 2.0;
         for (int i = 1; i < baseTimeLength - 1; ++i)
             diffWindow[i] = -(mainWindow[i + 1] - mainWindow[i - 1]) / 2.0;
         diffWindow[baseTimeLength - 1] = mainWindow[baseTimeLength - 2] / 2.0;
     }
 
-    static void getSpectra(World world, final double[] x, int fftSize, final int[] indexRaw, final double[] mainWindow, final double[] diffWindow, int baseTimeLength, final ForwardRealFFT forwardRealFFT, FFT.FFTComplex mainSpectrum, FFT.FFTComplex diffSpectrum) {
+    public static void getSpectra(World world, final double[] x, int fftSize, final int[] indexRaw, final double[] mainWindow, final double[] diffWindow, int baseTimeLength, final ForwardRealFFT forwardRealFFT, FFT.FFTComplex mainSpectrum, FFT.FFTComplex diffSpectrum) {
         int[] index = new int[baseTimeLength];
 
         for (int i = 0; i < baseTimeLength; ++i)
@@ -59,7 +58,7 @@ public record StoneMask(World world) {
         }
     }
 
-    static double fixF0(final double[] powerSpectrum, final double[] numeratorI, int fftSize, int fs, double initialF0, int numberOfHarmonics) {
+    public static double fixF0(final double[] powerSpectrum, final double[] numeratorI, int fftSize, int fs, double initialF0, int numberOfHarmonics) {
         double[] amplitudeList = new double[numberOfHarmonics];
         double[] instantaneousFrequencyList = new double[numberOfHarmonics];
         int index;
@@ -77,7 +76,7 @@ public record StoneMask(World world) {
         return numerator / (denominator + World.MY_SAFE_GUARD_MINIMUM);
     }
 
-    static double getTentativeF0(final double[] powerSpectrum, final double[] numeratorI, int fftSize, int fs, double initialF0) {
+    public static double getTentativeF0(final double[] powerSpectrum, final double[] numeratorI, int fftSize, int fs, double initialF0) {
         double tentativeF0 = fixF0(powerSpectrum, numeratorI, fftSize, fs, initialF0, 2);
 
         if (tentativeF0 <= 0.0 || tentativeF0 > initialF0 * 2) return 0.0;
@@ -85,7 +84,7 @@ public record StoneMask(World world) {
         return fixF0(powerSpectrum, numeratorI, fftSize, fs, tentativeF0, 6);
     }
 
-    static double getMeanF0(World world, final double[] x, int fs, double currentPosition, double initialF0, int fftSize, double windowLengthInTime, final double[] baseTime) {
+    public static double getMeanF0(World world, final double[] x, int fs, double currentPosition, double initialF0, int fftSize, double windowLengthInTime, final double[] baseTime) {
         ForwardRealFFT forwardRealFFT = new ForwardRealFFT(fftSize);
         FFT.FFTComplex mainSpectrum = new FFT.FFTComplex(fftSize);
         FFT.FFTComplex diffSpectrum = new FFT.FFTComplex(fftSize);
@@ -109,7 +108,7 @@ public record StoneMask(World world) {
         return getTentativeF0(powerSpectrum, numeratorI, fftSize, fs, initialF0);
     }
 
-    static double getRefinedF0(World world, final double[] x, int fs, double currentPosition, double initialF0) {
+    public static double getRefinedF0(World world, final double[] x, int fs, double currentPosition, double initialF0) {
         if (initialF0 <= World.FLOOR_F0_STONEMASK || initialF0 > fs / 12.0)
             return 0.0;
 
