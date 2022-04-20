@@ -2,11 +2,11 @@ package world.api.wave;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
 import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.UnsupportedAudioFileException;
@@ -23,9 +23,9 @@ public record WaveIO(File file) implements AudioInterface {
         }
 
         try {
-            AudioInputStream stream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(buf));
-            AudioSystem.write(stream, AudioFileFormat.Type.WAVE, new FileOutputStream(file));
-        } catch (UnsupportedAudioFileException | IOException e) {
+            AudioInputStream stream = new AudioInputStream(new ByteArrayInputStream(buf), new AudioFormat(AudioFormat.Encoding.PCM_FLOAT, fs, nbit, 1, 4, fs, false), (long) (fs * nbit));
+            AudioSystem.write(stream, AudioFileFormat.Type.WAVE, file);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
