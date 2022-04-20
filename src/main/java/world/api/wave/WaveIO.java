@@ -35,7 +35,7 @@ public record WaveIO(File file) implements AudioInterface {
     }
 
     @Override
-    public int GetAudioLength() {
+    public int getAudioLength() {
         try {
             AudioInputStream stream = AudioSystem.getAudioInputStream(file);
             return (int) (stream.getFrameLength() * stream.getFormat().getFrameSize());
