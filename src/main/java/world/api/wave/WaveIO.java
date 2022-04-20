@@ -16,22 +16,18 @@ import world.api.AudioInterface;
 public record WaveIO(File file) implements AudioInterface {
     @Override
     public void write(double[] x, int fs, int nbit) {
-            byte[] buf = new byte[x.length * fs];
+        byte[] buf = new byte[x.length * fs];
 
-            for (int i = 0;i < x.length;i++) {
-                ByteBuffer.wrap(buf, i * fs, fs).putDouble(x[i]);
-            }
+        for (int i = 0; i < x.length; i++) {
+            ByteBuffer.wrap(buf, i * fs, fs).putDouble(x[i]);
+        }
 
-            try {
-                AudioInputStream stream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(buf));
-                AudioSystem.write(stream, AudioFileFormat.Type.WAVE, new FileOutputStream(file));
-            } catch (UnsupportedAudioFileException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+        try {
+            AudioInputStream stream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(buf));
+            AudioSystem.write(stream, AudioFileFormat.Type.WAVE, new FileOutputStream(file));
+        } catch (UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -52,9 +48,11 @@ public record WaveIO(File file) implements AudioInterface {
             byte[] array = new byte[(int) stream.getFrameLength() * stream.getFormat().getFrameSize()];
             stream.read(array);
             double[] buf = new double[(int) (stream.getFrameLength())];
-            
-            for (int i = 0;i < buf.length; i++) {
-                buf[i] = ByteBuffer.wrap(array, i * stream.getFormat().getFrameSize(), stream.getFormat().getFrameSize()).getDouble();
+
+            for (int i = 0; i < buf.length; i++) {
+                buf[i] = ByteBuffer
+                        .wrap(array, i * stream.getFormat().getFrameSize(), stream.getFormat().getFrameSize())
+                        .getDouble();
             }
             return buf;
         } catch (UnsupportedAudioFileException | IOException e) {
@@ -62,5 +60,5 @@ public record WaveIO(File file) implements AudioInterface {
         }
         return new double[0];
     }
-    
+
 }
